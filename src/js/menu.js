@@ -1,4 +1,14 @@
+import 'material-icons/iconfont/material-icons.css';
 import storageAPI from './storage';
+import menu from './menu.json';
+import { createMarkupMenu } from '../templates/createMarkUpMenu';
+
+const listRef = document.querySelector('.menu-list');
+console.log(listRef);
+
+const markUp = createMarkupMenu(menu);
+console.log(markUp);
+listRef.insertAdjacentHTML('beforeend', markUp);
 
 const Theme = {
   LIGHT: 'light-theme',

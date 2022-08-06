@@ -163,3 +163,24 @@ body.dark-theme {
 .theme-switch__toggle:active+.theme-switch__track {
   box-shadow: 0 0 0 3px #2196f3;
 }
+
+.menu__item {
+  width: 500px;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.menu-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
