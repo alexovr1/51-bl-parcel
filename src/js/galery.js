@@ -29,8 +29,13 @@ const apiService = new UnSplash();
 apiService
   .getPopularImage(page)
   .then(({ results, total }) => {
+    if (results.length === 0) {
+      console.log('Something wrong');
+      return;
+    }
     const markUp = createGalleryCards(results);
     pagination.reset(total);
+    refs.container.classList.remove('is-hidden');
     refs.gallery.innerHTML = markUp;
   })
   .catch(error => console.log(error.message));
@@ -42,6 +47,11 @@ function updatePagination(e) {
   apiService
     .getPopularImage(currentPage)
     .then(({ results }) => {
+      if (results.length === 0) {
+        console.log('Something wrong');
+        refs.container.classList.add('is-hidden');
+        return;
+      }
       const markUp = createGalleryCards(results);
       refs.gallery.innerHTML = markUp;
     })
@@ -49,9 +59,50 @@ function updatePagination(e) {
 }
 const handalSubmit = event => {
   event.preventDefault();
+
   const { query } = event.currentTarget.elements;
   const value = query.value.trim();
   console.log(query);
   console.log(value);
+  if (!value) {
+    console.log('Enter data for the search');
+    refs.container.classList.add('is-hidden');
+    refs.gallery.innerHTML = '';
+    return;
+  }
+
+  apiService.query = value;
+
+  pagination.off('afterMove', updatePagination);
+  pagination.off('afterMove', updatePaginationAfterSearch);
+  pagination.on('afterMove', updatePaginationAfterSearch);
+
+  apiService
+    .getImagebyQuery(page)
+    .then(({ results, total }) => {
+      if (results.length === 0) {
+        console.log('Something wrong');
+        refs.container.classList.add('is-hidden');
+        refs.gallery.innerHTML = '';
+        return;
+      }
+      const markUp = createGalleryCards(results);
+      pagination.reset(total);
+      refs.container.classList.remove('is-hidden');
+      refs.gallery.innerHTML = markUp;
+    })
+    .catch(error => console.log(error.message));
 };
+
 refs.form.addEventListener('submit', handalSubmit);
+
+function updatePaginationAfterSearch(e) {
+  const currentPage = e.page;
+  apiService
+    .getImagebyQuery(currentPage)
+    .then(({ results }) => {
+      const markUp = createGalleryCards(results);
+      refs.gallery.innerHTML = markUp;
+    })
+    .catch(error => console.log(error.message));
+}
