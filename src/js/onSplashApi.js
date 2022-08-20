@@ -20,6 +20,18 @@ export class UnSplash {
             return response.json();
         })
     }
+    getImagebyQuery(page) {
+        const Url = `${this.#BASE_URL}?page=${page}&query=${this.#query}&${this.#searchParams}`
+        return fetch(Url).then(response => {
+            if (!response.ok) {
+                throw new Error(response.status);
+            }
+            return response.json();
+        })
+    }
+    set query (newQuery){
+        this.#query=newQuery
+    }
 }
 
 const URL = 'https://api.unsplash.com/search/photos?page=1&query=cats&client_id=LxvKVGJqiSe6NcEVZOaLXC-f2JIIWZaq_o0WrF8mwJc'

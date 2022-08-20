@@ -10,6 +10,7 @@ import { createGalleryCards } from '../templates/createGalleryCards';
 const refs = {
   gallery: document.querySelector('.js-gallery'),
   container: document.querySelector('#tui-pagination-container'),
+  form: document.querySelector('.js-search-form'),
 };
 const options = {
   totalItems: 0,
@@ -46,3 +47,11 @@ function updatePagination(e) {
     })
     .catch(error => console.log(error.message));
 }
+const handalSubmit = event => {
+  event.preventDefault();
+  const { query } = event.currentTarget.elements;
+  const value = query.value.trim();
+  console.log(query);
+  console.log(value);
+};
+refs.form.addEventListener('submit', handalSubmit);
